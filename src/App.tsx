@@ -7,7 +7,7 @@ const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
-      <MainPage autoplay entered={entered} />
+      <MainPage entered={entered} />
       {!entered && <EntrancePage onEnter={() => setEntered(true)} />}
     </div>
   );
