@@ -45,13 +45,13 @@ const ProfileCard: React.FC = () => {
   }, []);
 
   return (
-    <Card ref={cardRef} className="w-[600px] h-[400px] flex">
+    <Card ref={cardRef} className="w-[800px] h-[400px] flex bg-transparent backdrop-blur-md">
       <div className="flex flex-col w-full">
         <div className="flex p-8 items-start">
           <div className="mr-8">
-            <div className="w-32 h-32 rounded-full bg-gray-700/50 overflow-hidden shadow-lg border-2 border-gray-600/50">
+            <div className="w-32 h-32 rounded-full bg-gray-700/50 overflow-hidden shadow-lg">
               <img 
-                src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                src="https://cdn.discordapp.com/attachments/1171211624640688168/1371096253483585546/download_1.png?ex=6821e464&is=682092e4&hm=83c1985baf612d37e0ef4a8578a7cfef9649f991ad60f0fdfdda5ebdd0c0dc6d&" 
                 alt="Profile" 
                 className="w-full h-full object-cover"
               />
@@ -59,10 +59,10 @@ const ProfileCard: React.FC = () => {
           </div>
           <div className="flex flex-col justify-center">
             <h1 className="text-4xl font-bold mb-2 text-white text-glow">
-              <TypewriterText text="nixx" delay={150} deleteDelay={100} pauseDelayMin={700} pauseDelayMax={1400} />
+              <TypewriterText text="nixx" delay={150} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </h1>
             <div className="text-lg text-gray-400 text-glow-subtle">
-              <TypewriterText text="alive?" delay={170} deleteDelay={120} pauseDelayMin={700} pauseDelayMax={1400} />
+              <TypewriterText text="alive?" delay={170} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </div>
           </div>
         </div>

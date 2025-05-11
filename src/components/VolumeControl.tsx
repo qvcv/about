@@ -2,30 +2,40 @@ import React, { useState } from 'react';
 import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react';
 import Card from './shared/Card';
 
-const VolumeControl: React.FC = () => {
-  const [volume, setVolume] = useState(50);
-  const [isMuted, setIsMuted] = useState(false);
+interface VolumeControlProps {
+  volume: number;
+  isMuted: boolean;
+  onVolumeChange: (volume: number) => void;
+  onMuteToggle: (muted: boolean) => void;
+}
+
+const VolumeControl: React.FC<VolumeControlProps> = ({
+  volume,
+  isMuted,
+  onVolumeChange,
+  onMuteToggle
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value);
-    setVolume(newVolume);
+    onVolumeChange(newVolume);
     if (newVolume === 0) {
-      setIsMuted(true);
+      onMuteToggle(true);
     } else if (isMuted) {
-      setIsMuted(false);
+      onMuteToggle(false);
     }
   };
 
   const toggleMute = () => {
-    setIsMuted(!isMuted);
+    onMuteToggle(!isMuted);
   };
 
   const getVolumeIcon = () => {
-    if (isMuted || volume === 0) return <VolumeX size={18} />;
-    if (volume < 30) return <Volume size={18} />;
-    if (volume < 70) return <Volume1 size={18} />;
-    return <Volume2 size={18} />;
+    if (isMuted || volume === 0) return <VolumeX size={20} />;
+    if (volume < 30) return <Volume size={20} />;
+    if (volume < 70) return <Volume1 size={20} />;
+    return <Volume2 size={20} />;
   };
 
   return (
@@ -34,32 +44,35 @@ const VolumeControl: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Card className="p-3">
+      <Card className="flex items-center bg-white/5 backdrop-blur-md">
         <button
           onClick={toggleMute}
-          className="text-gray-400 hover:text-white transition-colors duration-300"
+          className="w-10 h-10 flex items-center background-transparent justify-center text-gray-400 hover:text-white transition-colors duration-300"
           aria-label={isMuted ? "Unmute" : "Mute"}
         >
           {getVolumeIcon()}
         </button>
+        <div 
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            isHovered ? 'w-32 opacity-100' : 'w-0 opacity-0'
+          }`}
+        >
+          <div className="px-4 py-3">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="w-24 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+              style={{ '--percent': `${isMuted ? 0 : volume}%` } as React.CSSProperties}
+              aria-label="Master volume control"
+            />
+          </div>
+        </div>
       </Card>
-      
-      {isHovered && (
-        <Card className="absolute left-0 top-full mt-2 px-4 py-3 flex items-center">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={isMuted ? 0 : volume}
-            onChange={handleVolumeChange}
-            className="w-24 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-            style={{ '--percent': `${isMuted ? 0 : volume}%` } as React.CSSProperties}
-            aria-label="Master volume control"
-          />
-        </Card>
-      )}
     </div>
   );
 };
 
-export default VolumeControl;
+export default VolumeControl

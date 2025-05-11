@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import EntrancePage from './components/EntrancePage';
+import MainPage from './components/MainPage';
 
-function App() {
+const App: React.FC = () => {
+  const [hasEntered, setHasEntered] = useState(false);
+
+  const handleEnter = () => {
+    setHasEntered(true);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <p>Start prompting (or editing) to see magic happen :)</p>
+    <div>
+      {!hasEntered ? (
+        <EntrancePage onEnter={handleEnter} />
+      ) : (
+        <MainPage />
+      )}
     </div>
   );
-}
+};
 
 export default App;
