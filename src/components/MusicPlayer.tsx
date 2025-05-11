@@ -7,24 +7,16 @@ interface MusicPlayerProps {
   isMuted: boolean;
 }
 
-interface AudioMetadata {
-  title: string;
-  artist: string;
-  album?: string;
-}
-
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [metadata, setMetadata] = useState<AudioMetadata>({ 
-    title: 'Loading...', 
-    artist: 'Loading...' 
-  });
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Path to your audio file in the public folder
-  const audioSource = '/audios/ANXIETY - Lil Darkie.mp3'; // Make sure this is correct
+  // Replace this URL with your audio file URL
+  const audioSource = 'https://example.com/your-audio-file.mp3';
+  const songTitle = 'Your Song Title';
+  const artistName = 'Artist Name';
   
   useEffect(() => {
     if (audioRef.current) {
@@ -44,9 +36,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration);
-      
-      // Try to extract metadata from audio element
-      extractMetadata(audio);
     };
 
     const handleEnded = () => {
@@ -64,61 +53,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
       audio.removeEventListener('ended', handleEnded);
     };
   }, [audioSource]);
-
-  const extractMetadata = (audio: HTMLAudioElement) => {
-    // Default metadata from filename
-    let extractedTitle = 'Unknown Title';
-    let extractedArtist = 'Unknown Artist';
-    
-    try {
-      // Try to get metadata from MediaSession API if available
-      if ('mediaSession' in navigator && audio.src) {
-        const mediaMetadata = navigator.mediaSession.metadata;
-        if (mediaMetadata) {
-          if (mediaMetadata.title) extractedTitle = mediaMetadata.title;
-          if (mediaMetadata.artist) extractedArtist = mediaMetadata.artist;
-        }
-      }
-      
-      // If we couldn't get metadata from MediaSession, try ID3 info
-      if (extractedTitle === 'Unknown Title' && audio.src) {
-        // Try to get from audio's tag properties (some browsers expose these)
-        if (audio.title) extractedTitle = audio.title;
-        
-        // Extract filename as a fallback
-        if (extractedTitle === 'Unknown Title') {
-          const filename = audioSource.split('/').pop()?.split('?')[0] || 'Unknown Title';
-          // Remove file extension if present
-          extractedTitle = filename.replace(/\.[^/.]+$/, "");
-        }
-      }
-      
-      // Update metadata state
-      setMetadata({
-        title: extractedTitle,
-        artist: extractedArtist
-      });
-
-      // Set media session metadata for system integration
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: extractedTitle,
-          artist: extractedArtist,
-          artwork: [
-            { src: '/audio/artwork.jpg', sizes: '512x512', type: 'image/jpeg' }
-          ]
-        });
-      }
-    } catch (error) {
-      console.error('Error extracting metadata:', error);
-      // Fallback to basic filename extraction
-      const filename = audioSource.split('/').pop()?.split('?')[0] || 'Unknown Title';
-      setMetadata({
-        title: filename.replace(/\.[^/.]+$/, ""),
-        artist: 'Unknown Artist'
-      });
-    }
-  };
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -162,10 +96,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
           <div className="text-lg font-medium text-glow-subtle">Currently Playing</div>
           <div className="flex flex-col">
             <div className="text-base font-medium text-white truncate transition-all duration-300">
-              {metadata.title}
+              {songTitle}
             </div>
             <div className="text-sm text-gray-400 truncate transition-all duration-300">
-              {metadata.artist}
+              {artistName}
             </div>
           </div>
         </div>

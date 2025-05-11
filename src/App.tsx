@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
-import EntrancePage from './components/EntrancePage';
 import MainPage from './components/MainPage';
+import EntrancePage from './components/EntrancePage';
 
 const App: React.FC = () => {
-  const [hasEntered, setHasEntered] = useState(false);
-
-  const handleEnter = () => {
-    setHasEntered(true);
-  };
+  const [entered, setEntered] = useState(false);
 
   return (
-    <div>
-      {!hasEntered ? (
-        <EntrancePage onEnter={handleEnter} />
-      ) : (
-        <MainPage />
-      )}
+    <div className="relative min-h-screen">
+      <MainPage autoplay entered={entered} />
+      {!entered && <EntrancePage onEnter={() => setEntered(true)} />}
     </div>
   );
 };
