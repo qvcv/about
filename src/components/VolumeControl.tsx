@@ -47,7 +47,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({
       <Card className="flex items-center bg-white/5 backdrop-blur-md">
         <button
           onClick={toggleMute}
-          className="w-10 h-10 flex items-center background-transparent justify-center text-gray-400 hover:text-white transition-colors duration-300"
+          className="w-10 h-10 flex items-center background-transparent justify-center text-white hover:text-white transition-colors duration-300"
           aria-label={isMuted ? "Unmute" : "Mute"}
         >
           {getVolumeIcon()}

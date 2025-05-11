@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-900 text-white;
+  @apply text-white overflow-x-hidden;
+  background-color: transparent;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow-x: hidden;
 }
 
 .animate-blink {
@@ -25,7 +25,7 @@ body {
 input[type="range"] {
   -webkit-appearance: none;
   height: 10px;
-  background: linear-gradient(to right, #9333ea var(--percent, 50%), #4b5563 var(--percent, 50%));
+  background: linear-gradient(to right, #f1f1f1 var(--percent, 50%), #191919 var(--percent, 50%));
   border-radius: 8px;
   outline: none;
 }
@@ -35,13 +35,13 @@ input[type="range"]::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #9333ea;
+  background: #f5f5f5;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
-  background: #a855f7;
+  background: #ffffff;
   transform: scale(1.15);
 }
 
@@ -50,13 +50,13 @@ input[type="range"]::-moz-range-thumb {
   height: 14px;
   border: none;
   border-radius: 50%;
-  background: #9333ea;
+  background: #f5f5f5;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
 
 input[type="range"]::-moz-range-thumb:hover {
-  background: #a855f7;
+  background: #ffffff;
   transform: scale(1.1);
 }
 

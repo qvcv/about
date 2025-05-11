@@ -3,10 +3,10 @@ import { MessagesSquare, DiscIcon as BrandDiscord } from 'lucide-react';
 
 const RobloxIcon = () => (
   <svg 
-    width="24" 
-    height="24" 
+    width="32" 
+    height="32" 
     viewBox="0 0 137 137" 
-    fill="currentColor"
+    fill="#f1f1f1"
     className="social-icon"
   >
     <path d="M38,9,12.51,108.12l99.18,25.52,25.52-99.17Zm44,74.51-19.36-5,5-19.36L87,64.1Z" />
@@ -14,10 +14,10 @@ const RobloxIcon = () => (
 );
 const DiscordIcon = () => (
   <svg 
-    width="24" 
-    height="24" 
+    width="32" 
+    height="32" 
     viewBox="0 -28.5 256 256" 
-    fill="currentColor"
+    fill="#f1f1f1"
     fill-rule="nonzero"
     className="social-icon"
   >
@@ -26,10 +26,10 @@ const DiscordIcon = () => (
 );
 const TelegramIcon = () => (
   <svg 
-    width="24" 
-    height="24" 
+    width="32" 
+    height="32" 
     viewBox="0 0 24 24" 
-    fill="currentColor"
+    fill="#f1f1f1"
     fill-rule="evenodd"
     className="social-icon"
   >

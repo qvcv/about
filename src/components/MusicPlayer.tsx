@@ -8,15 +8,14 @@ interface MusicPlayerProps {
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Replace this URL with your audio file URL
-  const audioSource = 'https://example.com/your-audio-file.mp3';
-  const songTitle = 'Your Song Title';
-  const artistName = 'Artist Name';
+  const audioSource = 'https://cdn.discordapp.com/attachments/1171211624640688168/1371095002154795019/RAP_MUSIC_PROD._WENDIGO.mp3?ex=6821e33a&is=682091ba&hm=0d83ee580b970254641878073ee05d3d14a10cc163f0ba8eca3bf6a089e41786&';
+  const songTitle = 'RAP MUSIC';
+  const artistName = 'LIL DARKIE PROD. WENDIGO';
   
   useEffect(() => {
     if (audioRef.current) {
@@ -52,7 +51,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [audioSource]);
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -89,16 +88,16 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
   };
 
   return (
-    <Card className="p-4 w-[600px] mx-auto bg-transparent backdrop-blur-md">
+    <Card className="p-4 w-full max-w-[600px] mx-auto bg-transparent backdrop-blur-md">
       <audio ref={audioRef} src={audioSource} />
       <div className="flex flex-col">
         <div className="mb-3">
-          <div className="text-lg font-medium text-glow-subtle">Currently Playing</div>
+          <div className="text-lg md:text-xl font-bold text-glow-subtle">Currently Playing</div>
           <div className="flex flex-col">
-            <div className="text-base font-medium text-white truncate transition-all duration-300">
+            <div className="text-base md:text-lg font-medium text-white truncate transition-all text-glow-subtle duration-300">
               {songTitle}
             </div>
-            <div className="text-sm text-gray-400 truncate transition-all duration-300">
+            <div className="text-sm md:text-base text-gray-200 truncate transition-all text-glow-subtle duration-300">
               {artistName}
             </div>
           </div>
@@ -124,14 +123,14 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
   
           <div className="flex items-center space-x-3">
             <button 
-              className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+              className="p-2 text-gray-600 hover:text-white transition-colors duration-300"
               aria-label="Previous track"
             >
               <SkipBack size={20} />
             </button>
   
             <button 
-              className="p-3 bg-purple-600 hover:bg-purple-700 rounded-full text-white transition-colors duration-300"
+              className="p-3 text-gray-600 hover:text-white rounded-full text-white transition-colors duration-300"
               onClick={togglePlay}
               aria-label={isPlaying ? "Pause" : "Play"}
             >
@@ -139,7 +138,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
             </button>
   
             <button 
-              className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+              className="p-2 text-gray-600 hover:text-white transition-colors duration-300"
               aria-label="Next track"
             >
               <SkipForward size={20} />

@@ -45,11 +45,11 @@ const ProfileCard: React.FC = () => {
   }, []);
 
   return (
-    <Card ref={cardRef} className="w-[800px] h-[400px] flex bg-transparent backdrop-blur-md">
+    <Card ref={cardRef} className="w-full max-w-[800px] md:h-[400px] h-[300px] flex bg-transparent backdrop-blur-md">
       <div className="flex flex-col w-full">
-        <div className="flex p-8 items-start">
-          <div className="mr-8">
-            <div className="w-32 h-32 rounded-full bg-gray-700/50 overflow-hidden shadow-lg">
+        <div className="flex p-4 md:p-8 items-start">
+          <div className="mr-4 md:mr-8">
+            <div className="w-20 h-20 md:w-32 md:h-32 rounded-full bg-gray-700/50 overflow-hidden shadow-lg">
               <img 
                 src="https://cdn.discordapp.com/attachments/1171211624640688168/1371096253483585546/download_1.png?ex=6821e464&is=682092e4&hm=83c1985baf612d37e0ef4a8578a7cfef9649f991ad60f0fdfdda5ebdd0c0dc6d&" 
                 alt="Profile" 
@@ -58,15 +58,15 @@ const ProfileCard: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col justify-center">
-            <h1 className="text-4xl font-bold mb-2 text-white text-glow">
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 text-white text-glow">
               <TypewriterText text="nixx" delay={150} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </h1>
-            <div className="text-lg text-gray-400 text-glow-subtle">
+            <div className="text-base md:text-lg text-gray-400 text-glow-subtle">
               <TypewriterText text="alive?" delay={170} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </div>
           </div>
         </div>
-        <div className="mt-auto mb-8 flex justify-center">
+        <div className="mt-auto mb-4 md:mb-8 flex justify-center">
           <SocialLinks />
         </div>
       </div>
