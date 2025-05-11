@@ -1,7 +1,7 @@
 {
   "name": "vite-react-typescript-starter",
   "version": "0.0.0",
-  "homepage": "https://findnixx.github.io/website",
+  "homepage": "https://qvcv.github.io/about",
   "type": "module",
   "scripts": {
     "dev": "vite",

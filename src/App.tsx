@@ -1,21 +1,9 @@
-import React, { useState } from 'react';
-import EntrancePage from './components/EntrancePage';
-import MainPage from './components/MainPage';
+import React from 'react';
 
 function App() {
-  const [isEntered, setIsEntered] = useState(false);
-
-  const handleEnter = () => {
-    setIsEntered(true);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      {!isEntered ? (
-        <EntrancePage onEnter={handleEnter} />
-      ) : (
-        <MainPage />
-      )}
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <p>Start prompting (or editing) to see magic happen :)</p>
     </div>
   );
 }
