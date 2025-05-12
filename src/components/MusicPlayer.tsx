@@ -23,24 +23,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
 
   const [playlist] = useState<Song[]>([
     {
-      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212259858186371/ssstik.io_1746895169136.mp3?ex=6822506e&is=6820feee&hm=0543409f897356559b671a808f0881320cca2dc90f42113269e6a9bfdfed843d&',
-      title: 'FRENCH DRILL',
-      artist: '?'
+      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371536470879244378/Ken_Carson_-_Ghoul_Slowed.mp3?ex=68237e60&is=68222ce0&hm=7869ec83149baf28fc5d1ae29325809271f5315218cc974fb2cec784c49c6080&',
+      title: 'GHOUL',
+      artist: 'Ken carson'
     },
     {
-      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212259480702998/Bandit.mp3?ex=6822506e&is=6820feee&hm=0b390ae59c5b5792da087237479878e5d2944482e27ce2b599f89ffd70a361b0&',
+      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212259480702998/Bandit.mp3?ex=6822f92e&is=6821a7ae&hm=25f5f0dc1e290d1220d7d0b55e3b41dcafb67886475a31f22462c94360ea3932&',
       title: 'BANDIT',
-      artist: 'DON TOLIVER'
+      artist: 'Don Toliver'
     },
     {
-      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212260588126369/Acid_Souljah__Smokedope2016_-_Tab_Talk_Prod._Ticox_Shadow_Wizard_Money_Gang.mp3?ex=6822506e&is=6820feee&hm=382f6af6504e4437a36eab68f40679f560a890e91c31efc77955d940842e4d36&',
-      title: 'TAB TALK',
-      artist: 'ACID SOULJAH & SMOKEDOPE2016'
-    },
-    {
-      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212260235677886/Timeless.mp3?ex=6822506e&is=6820feee&hm=f35c9cbf98ce7fdf7b0261f8053a4cfe3bd465debd94d6a692e9b9ec502aa85e&',
+      url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212260235677886/Timeless.mp3?ex=6822f92e&is=6821a7ae&hm=8c70237e57d0a5d17f845ba064b73f7c123164362adc58ccf48444fd357260d9&',
       title: 'TIMELESS',
-      artist: 'THE WEEKND & PLAYBOI CARTI'
+      artist: 'The Weeknd & Playboi Carti'
     }
   ]);
 
