@@ -25,7 +25,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     {
       url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371536470879244378/Ken_Carson_-_Ghoul_Slowed.mp3?ex=68237e60&is=68222ce0&hm=7869ec83149baf28fc5d1ae29325809271f5315218cc974fb2cec784c49c6080&',
       title: 'GHOUL',
-      artist: 'Ken carson'
+      artist: 'Ken Carson'
     },
     {
       url: 'https://cdn.discordapp.com/attachments/1171211624640688168/1371212259480702998/Bandit.mp3?ex=6822f92e&is=6821a7ae&hm=25f5f0dc1e290d1220d7d0b55e3b41dcafb67886475a31f22462c94360ea3932&',
