@@ -65,7 +65,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
       }
     };
 
-    audio.play().catch(e => console.error("Play failed:", e));
+    audio.play();
     fadeAnimationRef.current = requestAnimationFrame(fadeAudio);
 
     return () => {
@@ -111,7 +111,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
 
     setTimeout(() => {
       if (audioRef.current) {
-        audioRef.current.play().catch(e => console.error("Play failed:", e));
+        audioRef.current.play();
         setIsPlaying(true);
       }
     }, 50);
