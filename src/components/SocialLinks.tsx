@@ -1,5 +1,4 @@
 import React from 'react';
-import { MessagesSquare, DiscIcon as BrandDiscord } from 'lucide-react';
 
 const RobloxIcon = () => (
   <svg 
