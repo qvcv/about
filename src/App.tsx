@@ -60,7 +60,7 @@ const App: React.FC = () => {
 
         <div className="flex flex-col items-center justify-center h-full space-y-8 z-10">
           <ProfileCard />
-          {entered && <MusicPlayer volume={volume} isMuted={isMuted} autoPlay />}
+          {entered && <MusicPlayer volume={volume} isMuted={isMuted} />}
         </div>
       </div>
     </div>

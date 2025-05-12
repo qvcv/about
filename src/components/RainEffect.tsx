@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 const RainEffect: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastFrameTime = useRef(0);
-  const frameInterval = 1000 / 60; // 60 FPS
+  const frameInterval = 1000 / 60; 
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -29,7 +29,6 @@ const RainEffect: React.FC = () => {
     const MAX_RAINDROPS = 300;
     const raindrops: Raindrop[] = [];
 
-    // Initialize raindrops
     for (let i = 0; i < MAX_RAINDROPS; i++) {
       raindrops.push({
         x: Math.random() * width * 1.2,
@@ -61,13 +60,11 @@ const RainEffect: React.FC = () => {
 
       ctx.clearRect(0, 0, width, height);
 
-      // Update and draw raindrops
       raindrops.forEach((d) => {
         drawRaindrop(d);
         d.x += d.speedX;
         d.y += d.speedY;
 
-        // Reset position when out of bounds
         if (d.y > height) {
           d.y = -Math.random() * height;
           d.x = Math.random() * width * 1.2;

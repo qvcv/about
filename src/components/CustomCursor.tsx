@@ -10,24 +10,20 @@ const CustomCursor: React.FC = () => {
     if (!cursor || !particlesContainer) return;
 
     let particles: Array<{ element: HTMLDivElement; velocityX: number; velocityY: number }> = [];
-    
-    // Hide original cursor
+
     document.body.style.cursor = 'none';
 
     const updateCursor = (e: MouseEvent) => {
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
-      
-      // Create 3 particles at once with random offsets
+
       for (let i = 0; i < 3; i++) {
         const particle = document.createElement('div');
         particle.className = 'cursor-particle';
-        
-        // Random offset around cursor
+
         const offsetX = (Math.random() - 0.5) * 20;
         const offsetY = (Math.random() - 0.5) * 20;
-        
-        // Random velocities
+
         const velocityX = (Math.random() - 0.5) * 2;
         const velocityY = Math.random() * 1 + 1;
         
@@ -41,8 +37,7 @@ const CustomCursor: React.FC = () => {
           velocityY
         });
       }
-      
-      // Remove old particles
+
       if (particles.length > 50) {
         const old = particles.shift();
         if (old) particlesContainer.removeChild(old.element);

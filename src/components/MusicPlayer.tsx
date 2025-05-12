@@ -44,7 +44,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     }
   ]);
 
-  // Initial volume fade-in
+
   useEffect(() => {
     if (!audioRef.current) return;
 
@@ -75,14 +75,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     };
   }, []);
 
-  // Handle volume and mute changes
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume / 100;
     }
   }, [volume, isMuted]);
 
-  // Song progress and metadata handling
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -110,8 +108,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
   const changeSong = (newIndex: number) => {
     wasPlayingBeforeSkip.current = isPlaying;
     setCurrentSongIndex(newIndex);
-    
-    // Always play on song change
+
     setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.play().catch(e => console.error("Play failed:", e));
@@ -120,7 +117,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     }, 50);
   };
 
-  // Player controls
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -178,14 +174,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
         
 
           <div className="flex-1 relative group">
-            {/* Progress bar container */}
             <div className="h-2 flex items-center">
-              {/* Time labels */}
               <span className="text-xs text-gray-400 mr-2">
                 {audioRef.current ? formatTime(audioRef.current.currentTime) : '0:00'}
               </span>
-              
-              {/* Custom progress bar */}
+
               <div className="relative flex-1 h-1 bg-white/20 rounded-full">
                 <div 
                   className="absolute h-full bg-white rounded-full transition-all duration-50"
