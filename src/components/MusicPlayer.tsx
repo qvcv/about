@@ -14,16 +14,12 @@ interface MusicPlayerProps {
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
-  const CROSSFADE_DURATION = 1000; 
-  const FPS = 120; 
-
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const nextAudioRef = useRef<HTMLAudioElement>(null);
-  const [isCrossfading, setIsCrossfading] = useState(false);
-  const fadeInterval = useRef<number>();
+  const fadeAnimationRef = useRef<number>();
+  const wasPlayingBeforeSkip = useRef(true);
 
   const [playlist] = useState<Song[]>([
     {
@@ -48,63 +44,45 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     }
   ]);
 
-  const startCrossfade = (newIndex: number) => {
-    if (isCrossfading || !audioRef.current) return;
+  // Initial volume fade-in
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    const audio = audioRef.current;
+    audio.volume = 0;
     
-    setIsCrossfading(true);
-    const currentAudio = audioRef.current;
-    const nextAudio = new Audio(playlist[newIndex].url);
-    nextAudioRef.current = nextAudio;
+    const fadeDuration = 2000;
+    const startTime = performance.now();
+    const targetVolume = volume / 100;
 
-    currentAudio.volume = volume / 100;
-    nextAudio.volume = 0;
-    nextAudio.play().catch(e => console.error("Next track play failed:", e));
+    const fadeAudio = (timestamp: number) => {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / fadeDuration, 1);
+      audio.volume = progress * targetVolume;
 
-    const frameDuration = 1000 / FPS;
-    const totalFrames = CROSSFADE_DURATION / frameDuration;
-    let currentFrame = 0;
-
-    fadeInterval.current = window.setInterval(() => {
-      if (currentFrame >= totalFrames) {
-        clearInterval(fadeInterval.current);
-        currentAudio.pause();
-        audioRef.current = nextAudio;
-        setCurrentSongIndex(newIndex);
-        setIsCrossfading(false);
-        return;
+      if (progress < 1) {
+        fadeAnimationRef.current = requestAnimationFrame(fadeAudio);
       }
+    };
 
-      const progress = currentFrame / totalFrames;
-      currentAudio.volume = (volume / 100) * (1 - progress);
-      nextAudio.volume = (volume / 100) * progress;
-      
-      currentFrame++;
-    }, frameDuration);
-  };
+    audio.play().catch(e => console.error("Play failed:", e));
+    fadeAnimationRef.current = requestAnimationFrame(fadeAudio);
 
-  const handleEnded = () => {
-    const nextIndex = (currentSongIndex + 1) % playlist.length;
-    startCrossfade(nextIndex);
-  };
-
-  const changeSong = (newIndex: number) => {
-    if (newIndex === currentSongIndex) return;
-    startCrossfade(newIndex);
-  };
-  
-  useEffect(() => {
-    if (audioRef.current && !isCrossfading) {
-      audioRef.current.volume = isMuted ? 0 : volume / 100;
-    }
-  }, [volume, isMuted, isCrossfading]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = playlist[currentSongIndex].url;
-      audioRef.current.play();
-    }
+    return () => {
+      if (fadeAnimationRef.current) {
+        cancelAnimationFrame(fadeAnimationRef.current);
+      }
+    };
   }, []);
 
+  // Handle volume and mute changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume / 100;
+    }
+  }, [volume, isMuted]);
+
+  // Song progress and metadata handling
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -115,6 +93,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
       }
     };
 
+    const handleEnded = () => {
+      const nextIndex = (currentSongIndex + 1) % playlist.length;
+      changeSong(nextIndex);
+    };
+
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('ended', handleEnded);
 
@@ -122,8 +105,22 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [currentSongIndex]);
+  }, [currentSongIndex, playlist.length]);
 
+  const changeSong = (newIndex: number) => {
+    wasPlayingBeforeSkip.current = isPlaying;
+    setCurrentSongIndex(newIndex);
+    
+    // Always play on song change
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(e => console.error("Play failed:", e));
+        setIsPlaying(true);
+      }
+    }, 50);
+  };
+
+  // Player controls
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -138,9 +135,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setProgress(value);
-    if (audioRef.current) {
-      const time = (value / 100) * audioRef.current.duration;
-      audioRef.current.currentTime = time;
+    if (audioRef.current?.duration) {
+      audioRef.current.currentTime = (value / 100) * audioRef.current.duration;
     }
   };
 
@@ -150,75 +146,93 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ volume, isMuted }) => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const playNextSong = () => changeSong((currentSongIndex + 1) % playlist.length);
-  const playPreviousSong = () => 
-    changeSong((currentSongIndex - 1 + playlist.length) % playlist.length);
+  const playNextSong = () => {
+    const nextIndex = (currentSongIndex + 1) % playlist.length;
+    changeSong(nextIndex);
+  };
+
+  const playPreviousSong = () => {
+    const prevIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+    changeSong(prevIndex);
+  };
 
   const currentSong = playlist[currentSongIndex];
 
-  return (
-    <Card className="p-4 w-full max-w-[600px] mx-auto bg-transparent backdrop-blur-md">
+    return (
+    <Card className="p-4 w-full max-w-[600px] mx-auto bg-transparent backdrop-blur-md rounded-2xl shadow-md">
       <audio ref={audioRef} src={currentSong.url} />
-      <div className="flex flex-col">
-        <div className="mb-3">
-          <div className="text-lg md:text-xl font-bold text-glow-subtle">Currently Playing</div>
-          <div className="flex flex-col">
-            <div className="text-base md:text-lg font-medium text-white truncate transition-all text-glow-subtle duration-300">
-              {currentSong.title}
-            </div>
-            <div className="text-sm md:text-base text-gray-200 truncate transition-all text-glow-subtle duration-300">
-              {currentSong.artist}
-            </div>
-            <div className="text-xs text-gray-400 mt-1">
-              {currentSongIndex + 1} of {playlist.length}
-            </div>
+      <div className="flex flex-col space-y-3">
+        <div className="text-left">
+          <div className="text-xl md:text-xl font-semibold text-white text-glow">
+            {currentSong.title}
+          </div>
+          <div className="text-sm text-gray-300 text-glow">
+            {currentSong.artist}
+          </div>
+          <div className="text-xs text-gray-400 mt-1 text-glow">
+            {currentSongIndex + 1} of {playlist.length}
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="flex-1">
+        <div className="flex items-center gap-3">
+        
+
+          <div className="flex-1 relative group">
+            {/* Progress bar container */}
+            <div className="h-2 flex items-center">
+              {/* Time labels */}
+              <span className="text-xs text-gray-400 mr-2">
+                {audioRef.current ? formatTime(audioRef.current.currentTime) : '0:00'}
+              </span>
+              
+              {/* Custom progress bar */}
+              <div className="relative flex-1 h-1 bg-white/20 rounded-full">
+                <div 
+                  className="absolute h-full bg-white rounded-full transition-all duration-50"
+                  style={{ width: `${progress}%` }}
+                />
+                <div 
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-glow transition-all duration-50"
+                  style={{ left: `calc(${progress}% - 4px)` }}
+                />
+              </div>
+
+              <span className="text-xs text-gray-400 ml-2">
+                {audioRef.current ? formatTime(audioRef.current.duration) : '0:00'}
+              </span>
+            </div>
+
             <input
               type="range"
               min="0"
               max="100"
               value={progress}
               onChange={handleProgressChange}
-              className="w-full"
-              style={{ '--percent': `${progress}%` } as React.CSSProperties}
-              aria-label="Song progress"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
-            <div className="flex justify-between mt-1">
-              <span className="text-xs text-gray-400">
-                {audioRef.current ? formatTime(audioRef.current.currentTime) : '0:00'}
-              </span>
-              <span className="text-xs text-gray-400">
-                {audioRef.current ? formatTime(audioRef.current.duration) : '0:00'}
-              </span>
-            </div>
           </div>
-
-          <div className="flex items-center space-x-3">
-            <button 
-              className="p-2 text-gray-600 hover:text-white transition-colors duration-300"
-              onClick={playPreviousSong}
-            >
-              <SkipBack size={20} />
-            </button>
-
-            <button 
-              className="p-3 text-gray-600 hover:text-white rounded-full text-white transition-colors duration-300"
-              onClick={togglePlay}
-            >
-              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-            </button>
-
-            <button 
-              className="p-2 text-gray-600 hover:text-white transition-colors duration-300"
-              onClick={playNextSong}
-            >
-              <SkipForward size={20} />
-            </button>
-          </div>
+          <button 
+            onClick={playPreviousSong} 
+            className="text-gray-300 hover:text-white text-glow"
+          >
+            <SkipBack size={18} />
+          </button>
+          <button
+            onClick={togglePlay}
+            className="p-2  rounded-full  transition text-glow"
+          >
+            {isPlaying ? (
+              <Pause size={20} className="text-white" />
+            ) : (
+              <Play size={20} className="text-white" />
+            )}
+          </button>
+          <button 
+            onClick={playNextSong} 
+            className="text-gray-300 hover:text-white text-glow"
+          >
+            <SkipForward size={18} />
+          </button>
         </div>
       </div>
     </Card>

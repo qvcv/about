@@ -61,7 +61,7 @@ const ProfileCard: React.FC = () => {
             <h1 className="text-2xl md:text-4xl font-bold mb-2 text-white text-glow">
               <TypewriterText text="nixx" delay={170} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </h1>
-            <div className="text-base md:text-lg text-gray-400 text-glow-subtle">
+            <div className="text-base md:text-lg text-gray-400 text-glow">
               <TypewriterText text="joined 16 years ago" delay={170} deleteDelay={150} pauseDelayMin={700} pauseDelayMax={1400} />
             </div>
           </div>
